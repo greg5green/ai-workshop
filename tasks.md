@@ -1,9 +1,9 @@
 # Bug Triage Bot — Implementation Tasks
 
-## Phase 1 — Project scaffold
-- [ ] Create `package.json` with `"start": "tsx src/index.ts"`
-- [ ] Create `tsconfig.json`
-- [ ] Create `src/` with empty stubs for `index.ts`, `github.ts`, `triage.ts`
+## Phase 1 — Project scaffold ✓
+- [x] Create `package.json` with `"start": "tsx src/index.ts"`
+- [x] Create `tsconfig.json`
+- [x] Create `src/` with empty stubs for `index.ts`, `github.ts`, `triage.ts`
 
 ## Phase 2 — Install dependencies
 - [ ] Runtime: `@anthropic-ai/claude-agent-sdk`, `@octokit/rest`, `zod`, `dotenv`
