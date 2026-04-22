@@ -9,9 +9,9 @@
 - [x] Runtime: `@anthropic-ai/claude-agent-sdk`, `@octokit/rest`, `zod`, `dotenv`
 - [x] Dev: `typescript`, `tsx`
 
-## Phase 3 — `github.ts`
-- [ ] Octokit client from `GITHUB_TOKEN`
-- [ ] `fetchRecentIssues(repo)` → 10 most recent open issues
+## Phase 3 — `github.ts` ✓
+- [x] Octokit client from `GITHUB_TOKEN`
+- [x] `fetchRecentIssues(repo)` → 10 most recent open issues
 
 ## Phase 4 — `triage.ts`
 - [ ] `TriageSchema` (severity / category / summary / suggestedAction)
