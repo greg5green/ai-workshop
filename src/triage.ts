@@ -40,6 +40,7 @@ Respond with ONLY the JSON object, no additional text or markdown formatting.`;
       model: "claude-sonnet-4-6",
       tools: [],
       maxTurns: 1,
+      pathToClaudeCodeExecutable: process.env.CLAUDE_CODE_PATH ?? "claude",
     },
   });
 
@@ -59,7 +60,7 @@ Respond with ONLY the JSON object, no additional text or markdown formatting.`;
     throw new Error(`Query failed: ${resultMessage.subtype}`);
   }
 
-  const text = resultMessage.result;
+  const text = resultMessage.result.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "").trim();
 
   const parsed = JSON.parse(text) as unknown;
   return TriageSchema.parse(parsed);

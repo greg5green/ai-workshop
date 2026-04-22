@@ -20,6 +20,6 @@
 ## Phase 5 — `index.ts` ✓
 - [x] Load env, fetch issues, triage sequentially, filter to `high`, print formatted output
 
-## Phase 6 — End-to-end test
-- [ ] `.env` with real credentials + `GITHUB_REPO=facebook/react`
-- [ ] `npm start` → verify 10 issues triaged, high-severity results printed
+## Phase 6 — End-to-end test ✓
+- [x] Credentials from environment (no `.env` needed) + `GITHUB_REPO=facebook/react`
+- [x] `npm start` → verify 10 issues triaged, high-severity results printed
