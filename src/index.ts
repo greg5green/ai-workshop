@@ -8,7 +8,8 @@ async function main() {
     throw new Error("GITHUB_REPO environment variable is not set");
   }
 
-  const issues = await fetchRecentIssues(repo);
+  const mock = process.argv.includes("--mock");
+  const issues = await fetchRecentIssues(repo, mock);
 
   const highSeverityResults: Array<{
     number: number;

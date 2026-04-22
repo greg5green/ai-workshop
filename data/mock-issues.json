@@ -1,0 +1,68 @@
+[
+  {
+    "number": 42,
+    "title": "Application crashes on startup when DATABASE_URL is missing",
+    "body": "## Bug Report\n\nThe app exits with an unhandled exception instead of a clear error message when DATABASE_URL is not set.\n\n**Steps to reproduce:**\n1. Remove DATABASE_URL from the environment\n2. Start the server\n\n**Expected:** helpful error message and clean exit\n**Actual:** `TypeError: Cannot read properties of undefined (reading 'connect')` with a full stack trace dumped to stderr\n\n**Impact:** New developers can't onboard without debugging this. Happens every time someone clones the repo without copying .env.example.",
+    "html_url": "https://github.com/example/myapp/issues/42",
+    "state": "open",
+    "created_at": "2026-04-20T09:15:00Z",
+    "updated_at": "2026-04-21T14:30:00Z",
+    "labels": [{ "name": "bug" }, { "name": "dx" }],
+    "user": { "login": "alice" }
+  },
+  {
+    "number": 38,
+    "title": "SQL injection possible in /api/users/search endpoint",
+    "body": "## Security Issue\n\nThe `q` query parameter in `/api/users/search` is interpolated directly into a raw SQL string without sanitization.\n\n```\nGET /api/users/search?q='; DROP TABLE users; --\n```\n\nThis executes successfully on the staging environment. Confirmed with a read-only payload; did not attempt destructive queries.\n\n**Affected file:** `src/routes/users.ts` line 84\n\nSuggest switching to parameterized queries or an ORM method.",
+    "html_url": "https://github.com/example/myapp/issues/38",
+    "state": "open",
+    "created_at": "2026-04-19T16:45:00Z",
+    "updated_at": "2026-04-21T11:00:00Z",
+    "labels": [{ "name": "security" }, { "name": "critical" }],
+    "user": { "login": "bob" }
+  },
+  {
+    "number": 35,
+    "title": "Dashboard takes 8+ seconds to load with >500 records",
+    "body": "## Performance\n\nThe main dashboard query does a full table scan. With our current dataset (≈2,000 rows) the page takes over 8 seconds on production.\n\nAdding an index on `(user_id, created_at)` on the `events` table brought it down to 120ms in local testing.\n\nMigration script attached. No schema changes, index-only.",
+    "html_url": "https://github.com/example/myapp/issues/35",
+    "state": "open",
+    "created_at": "2026-04-18T10:00:00Z",
+    "updated_at": "2026-04-20T08:45:00Z",
+    "labels": [{ "name": "performance" }],
+    "user": { "login": "carol" }
+  },
+  {
+    "number": 31,
+    "title": "Password-change emails not sent when user updates via profile page",
+    "body": "## Bug\n\nWhen a user changes their password through `/settings/profile`, the confirmation email is never sent. The email fires correctly when the password is reset via the forgot-password flow.\n\nLooked at the code briefly — it seems `sendPasswordChangedEmail` is called in the reset handler but not in the profile update handler (`src/controllers/profile.ts`).",
+    "html_url": "https://github.com/example/myapp/issues/31",
+    "state": "open",
+    "created_at": "2026-04-17T13:20:00Z",
+    "updated_at": "2026-04-19T09:10:00Z",
+    "labels": [{ "name": "bug" }, { "name": "email" }],
+    "user": { "login": "dave" }
+  },
+  {
+    "number": 27,
+    "title": "Pagination controls invisible on dark mode",
+    "body": "## UI Bug\n\nThe pagination arrows on the users list page use a hardcoded `color: #333` which disappears against the dark background. Affects users who have enabled dark mode in their OS.\n\n**Screenshot:** (attached)\n\nQuick fix: replace the hardcoded value with the `--color-text` CSS variable already used elsewhere.",
+    "html_url": "https://github.com/example/myapp/issues/27",
+    "state": "open",
+    "created_at": "2026-04-16T11:05:00Z",
+    "updated_at": "2026-04-16T11:05:00Z",
+    "labels": [{ "name": "ui" }, { "name": "accessibility" }],
+    "user": { "login": "eve" }
+  },
+  {
+    "number": 22,
+    "title": "Update README: API rate-limit section is out of date",
+    "body": "The README still documents the old rate limit of 100 req/min. Since the v2 rollout it's 500 req/min for authenticated clients. Causing confusion in the community Discord.",
+    "html_url": "https://github.com/example/myapp/issues/22",
+    "state": "open",
+    "created_at": "2026-04-14T08:30:00Z",
+    "updated_at": "2026-04-14T08:30:00Z",
+    "labels": [{ "name": "documentation" }],
+    "user": { "login": "frank" }
+  }
+]
