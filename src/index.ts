@@ -1,23 +1,43 @@
 import "dotenv/config";
+import { fileURLToPath } from "url";
 import { fetchRecentIssues } from "./github.js";
 import { triageIssue, type Triage } from "./triage.js";
+
+export type TriagedIssue = {
+  number: number;
+  title: string;
+  html_url: string;
+  triage: Triage;
+};
+
+export function filterHighSeverity(results: TriagedIssue[]): TriagedIssue[] {
+  return results.filter((r) => r.triage.severity === "high");
+}
+
+export function formatReport(results: TriagedIssue[]): string {
+  if (results.length === 0) {
+    return "No high-severity issues found.";
+  }
+  const lines: string[] = [`Found ${results.length} high-severity issue(s):\n`];
+  for (const result of results) {
+    lines.push(`Issue #${result.number}: ${result.title}`);
+    lines.push(`URL:              ${result.html_url}`);
+    lines.push(`Category:         ${result.triage.category}`);
+    lines.push(`Summary:          ${result.triage.summary}`);
+    lines.push(`Suggested Action: ${result.triage.suggestedAction}`);
+    lines.push("---");
+  }
+  return lines.join("\n");
+}
 
 async function main() {
   const repo = process.env.GITHUB_REPO;
   if (!repo) {
     throw new Error("GITHUB_REPO environment variable is not set");
   }
-
   const mock = process.argv.includes("--mock");
   const issues = await fetchRecentIssues(repo, mock);
-
-  const highSeverityResults: Array<{
-    number: number;
-    title: string;
-    html_url: string;
-    triage: Triage;
-  }> = [];
-
+  const triaged: TriagedIssue[] = [];
   for (const issue of issues) {
     const triage = await triageIssue({
       title: issue.title,
@@ -25,35 +45,14 @@ async function main() {
       number: issue.number,
       html_url: issue.html_url,
     }, mock);
-
-    if (triage.severity === "high") {
-      highSeverityResults.push({
-        number: issue.number,
-        title: issue.title,
-        html_url: issue.html_url,
-        triage,
-      });
-    }
+    triaged.push({ number: issue.number, title: issue.title, html_url: issue.html_url, triage });
   }
-
-  if (highSeverityResults.length === 0) {
-    console.log("No high-severity issues found.");
-    return;
-  }
-
-  console.log(`Found ${highSeverityResults.length} high-severity issue(s):\n`);
-
-  for (const result of highSeverityResults) {
-    console.log(`Issue #${result.number}: ${result.title}`);
-    console.log(`URL:              ${result.html_url}`);
-    console.log(`Category:         ${result.triage.category}`);
-    console.log(`Summary:          ${result.triage.summary}`);
-    console.log(`Suggested Action: ${result.triage.suggestedAction}`);
-    console.log("---");
-  }
+  console.log(formatReport(filterHighSeverity(triaged)));
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
