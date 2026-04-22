@@ -24,7 +24,7 @@ async function main() {
       body: issue.body ?? null,
       number: issue.number,
       html_url: issue.html_url,
-    });
+    }, mock);
 
     if (triage.severity === "high") {
       highSeverityResults.push({

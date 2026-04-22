@@ -1,5 +1,8 @@
 import { query, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
+import { readFile } from "fs/promises";
+import { fileURLToPath } from "url";
+import { join, dirname } from "path";
 
 export const TriageSchema = z.object({
   severity: z.enum(["low", "medium", "high"]),
@@ -17,7 +20,17 @@ export interface Issue {
   html_url: string;
 }
 
-export async function triageIssue(issue: Issue): Promise<Triage> {
+export async function triageIssue(issue: Issue, mock = false): Promise<Triage> {
+  if (mock) {
+    const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+    const raw = await readFile(join(projectRoot, "data", "mock-issues.json"), "utf-8");
+    const entries = JSON.parse(raw) as Array<{ number: number; triage: unknown }>;
+    const entry = entries.find((e) => e.number === issue.number);
+    if (!entry) {
+      throw new Error(`No mock triage data for issue #${issue.number}`);
+    }
+    return TriageSchema.parse(entry.triage);
+  }
   const prompt = `You are a bug triage assistant. Analyze the following GitHub issue and return a JSON object that matches this schema exactly:
 
 {

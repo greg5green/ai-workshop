@@ -8,7 +8,13 @@
     "created_at": "2026-04-20T09:15:00Z",
     "updated_at": "2026-04-21T14:30:00Z",
     "labels": [{ "name": "bug" }, { "name": "dx" }],
-    "user": { "login": "alice" }
+    "user": { "login": "alice" },
+    "triage": {
+      "severity": "high",
+      "category": "Reliability",
+      "summary": "App crashes with an unhelpful stack trace when DATABASE_URL is missing instead of printing a clear error and exiting cleanly.",
+      "suggestedAction": "Add an early env-var guard in the startup sequence that checks for DATABASE_URL and exits with a descriptive message before attempting to connect."
+    }
   },
   {
     "number": 38,
@@ -19,7 +25,13 @@
     "created_at": "2026-04-19T16:45:00Z",
     "updated_at": "2026-04-21T11:00:00Z",
     "labels": [{ "name": "security" }, { "name": "critical" }],
-    "user": { "login": "bob" }
+    "user": { "login": "bob" },
+    "triage": {
+      "severity": "high",
+      "category": "Security",
+      "summary": "The /api/users/search endpoint interpolates user input directly into a raw SQL string, confirmed exploitable on staging.",
+      "suggestedAction": "Replace the raw string interpolation in src/routes/users.ts:84 with parameterized queries or an ORM binding method."
+    }
   },
   {
     "number": 35,
@@ -30,7 +42,13 @@
     "created_at": "2026-04-18T10:00:00Z",
     "updated_at": "2026-04-20T08:45:00Z",
     "labels": [{ "name": "performance" }],
-    "user": { "login": "carol" }
+    "user": { "login": "carol" },
+    "triage": {
+      "severity": "medium",
+      "category": "Performance",
+      "summary": "Dashboard performs a full table scan on the events table causing 8+ second load times in production with ~2,000 rows.",
+      "suggestedAction": "Apply the proposed migration to add a composite index on (user_id, created_at) to the events table."
+    }
   },
   {
     "number": 31,
@@ -41,7 +59,13 @@
     "created_at": "2026-04-17T13:20:00Z",
     "updated_at": "2026-04-19T09:10:00Z",
     "labels": [{ "name": "bug" }, { "name": "email" }],
-    "user": { "login": "dave" }
+    "user": { "login": "dave" },
+    "triage": {
+      "severity": "medium",
+      "category": "Email Notifications",
+      "summary": "Password-change confirmation emails are sent in the forgot-password flow but omitted in the profile-update flow.",
+      "suggestedAction": "Call sendPasswordChangedEmail in the profile update handler in src/controllers/profile.ts, mirroring the reset handler."
+    }
   },
   {
     "number": 27,
@@ -52,7 +76,13 @@
     "created_at": "2026-04-16T11:05:00Z",
     "updated_at": "2026-04-16T11:05:00Z",
     "labels": [{ "name": "ui" }, { "name": "accessibility" }],
-    "user": { "login": "eve" }
+    "user": { "login": "eve" },
+    "triage": {
+      "severity": "low",
+      "category": "UI",
+      "summary": "Pagination arrows use a hardcoded color:#333 that becomes invisible on dark backgrounds.",
+      "suggestedAction": "Replace the hardcoded color value with the --color-text CSS variable already used elsewhere in the stylesheet."
+    }
   },
   {
     "number": 22,
@@ -63,6 +93,12 @@
     "created_at": "2026-04-14T08:30:00Z",
     "updated_at": "2026-04-14T08:30:00Z",
     "labels": [{ "name": "documentation" }],
-    "user": { "login": "frank" }
+    "user": { "login": "frank" },
+    "triage": {
+      "severity": "low",
+      "category": "Documentation",
+      "summary": "The README documents the old rate limit of 100 req/min; the actual limit since v2 is 500 req/min for authenticated clients.",
+      "suggestedAction": "Update the rate-limit section in the README to reflect the current 500 req/min limit for authenticated clients."
+    }
   }
 ]
