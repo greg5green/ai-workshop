@@ -13,9 +13,9 @@
 - [x] Octokit client from `GITHUB_TOKEN`
 - [x] `fetchRecentIssues(repo)` → 10 most recent open issues
 
-## Phase 4 — `triage.ts`
-- [ ] `TriageSchema` (severity / category / summary / suggestedAction)
-- [ ] `triageIssue(issue)` → calls `query()`, captures `ResultMessage`, parses with Zod
+## Phase 4 — `triage.ts` ✓
+- [x] `TriageSchema` (severity / category / summary / suggestedAction)
+- [x] `triageIssue(issue)` → calls `query()`, captures `ResultMessage`, parses with Zod
 
 ## Phase 5 — `index.ts`
 - [ ] Load env, fetch issues, triage sequentially, filter to `high`, print formatted output
