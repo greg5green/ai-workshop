@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
-    "test": "node --import tsx/esm --test src/*.test.ts"
+    "test": "node --import tsx/esm --test src/*.test.ts",
+    "eval": "node --import tsx/esm src/triage.eval.ts"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.117",
