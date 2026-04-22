@@ -56,13 +56,15 @@ async function main() {
     triaged.push({ number: issue.number, title: issue.title, html_url: issue.html_url, body: issue.body ?? null, triage });
   }
   const highSeverity = filterHighSeverity(triaged);
-  for (const item of highSeverity) {
-    item.scout = await scoutBug(
-      { title: item.title, body: item.body, number: item.number, html_url: item.html_url },
-      repoUrl,
-      mock
-    );
-  }
+  await Promise.all(
+    highSeverity.map(async (item) => {
+      item.scout = await scoutBug(
+        { title: item.title, body: item.body, number: item.number, html_url: item.html_url },
+        repoUrl,
+        mock
+      );
+    })
+  );
   console.log(formatReport(highSeverity));
 }
 
