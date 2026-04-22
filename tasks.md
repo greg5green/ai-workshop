@@ -5,9 +5,9 @@
 - [x] Create `tsconfig.json`
 - [x] Create `src/` with empty stubs for `index.ts`, `github.ts`, `triage.ts`
 
-## Phase 2 — Install dependencies
-- [ ] Runtime: `@anthropic-ai/claude-agent-sdk`, `@octokit/rest`, `zod`, `dotenv`
-- [ ] Dev: `typescript`, `tsx`
+## Phase 2 — Install dependencies ✓
+- [x] Runtime: `@anthropic-ai/claude-agent-sdk`, `@octokit/rest`, `zod`, `dotenv`
+- [x] Dev: `typescript`, `tsx`
 
 ## Phase 3 — `github.ts`
 - [ ] Octokit client from `GITHUB_TOKEN`
