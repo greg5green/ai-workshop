@@ -17,8 +17,8 @@
 - [x] `TriageSchema` (severity / category / summary / suggestedAction)
 - [x] `triageIssue(issue)` → calls `query()`, captures `ResultMessage`, parses with Zod
 
-## Phase 5 — `index.ts`
-- [ ] Load env, fetch issues, triage sequentially, filter to `high`, print formatted output
+## Phase 5 — `index.ts` ✓
+- [x] Load env, fetch issues, triage sequentially, filter to `high`, print formatted output
 
 ## Phase 6 — End-to-end test
 - [ ] `.env` with real credentials + `GITHUB_REPO=facebook/react`
