@@ -14,6 +14,12 @@
       "category": "Reliability",
       "summary": "App crashes with an unhelpful stack trace when DATABASE_URL is missing instead of printing a clear error and exiting cleanly.",
       "suggestedAction": "Add an early env-var guard in the startup sequence that checks for DATABASE_URL and exits with a descriptive message before attempting to connect."
+    },
+    "scout": {
+      "filePath": "src/server/startup.ts",
+      "lineRange": "42-61",
+      "snippet": "const db = new Database(process.env.DATABASE_URL);",
+      "explanation": "DATABASE_URL is passed directly to the Database constructor on line 44 with no null-check. When the env var is absent, the constructor throws a TypeError and the process exits with an unhandled exception and a cryptic stack trace."
     }
   },
   {
@@ -31,6 +37,12 @@
       "category": "Security",
       "summary": "The /api/users/search endpoint interpolates user input directly into a raw SQL string, confirmed exploitable on staging.",
       "suggestedAction": "Replace the raw string interpolation in src/routes/users.ts:84 with parameterized queries or an ORM binding method."
+    },
+    "scout": {
+      "filePath": "src/routes/users.ts",
+      "lineRange": "80-90",
+      "snippet": "const rows = await db.query(`SELECT * FROM users WHERE name LIKE '%${q}%'`);",
+      "explanation": "The query parameter q is interpolated directly into the SQL string on line 84 without sanitization or parameterization, making it trivially exploitable via SQL injection."
     }
   },
   {

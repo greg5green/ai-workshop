@@ -2,12 +2,15 @@ import "dotenv/config";
 import { fileURLToPath } from "url";
 import { fetchRecentIssues } from "./github.js";
 import { triageIssue, type Triage } from "./triage.js";
+import { scoutBug, type ScoutResult } from "./scout.js";
 
 export type TriagedIssue = {
   number: number;
   title: string;
   html_url: string;
+  body: string | null;
   triage: Triage;
+  scout?: ScoutResult;
 };
 
 export function filterHighSeverity(results: TriagedIssue[]): TriagedIssue[] {
@@ -25,6 +28,10 @@ export function formatReport(results: TriagedIssue[]): string {
     lines.push(`Category:         ${result.triage.category}`);
     lines.push(`Summary:          ${result.triage.summary}`);
     lines.push(`Suggested Action: ${result.triage.suggestedAction}`);
+    if (result.scout) {
+      lines.push(`Scout:            ${result.scout.filePath} (lines ${result.scout.lineRange})`);
+      lines.push(`                  ${result.scout.explanation}`);
+    }
     lines.push("---");
   }
   return lines.join("\n");
@@ -35,6 +42,7 @@ async function main() {
   if (!repo) {
     throw new Error("GITHUB_REPO environment variable is not set");
   }
+  const repoUrl = `https://github.com/${repo}`;
   const mock = process.argv.includes("--mock");
   const issues = await fetchRecentIssues(repo, mock);
   const triaged: TriagedIssue[] = [];
@@ -45,9 +53,17 @@ async function main() {
       number: issue.number,
       html_url: issue.html_url,
     }, mock);
-    triaged.push({ number: issue.number, title: issue.title, html_url: issue.html_url, triage });
+    triaged.push({ number: issue.number, title: issue.title, html_url: issue.html_url, body: issue.body ?? null, triage });
   }
-  console.log(formatReport(filterHighSeverity(triaged)));
+  const highSeverity = filterHighSeverity(triaged);
+  for (const item of highSeverity) {
+    item.scout = await scoutBug(
+      { title: item.title, body: item.body, number: item.number, html_url: item.html_url },
+      repoUrl,
+      mock
+    );
+  }
+  console.log(formatReport(highSeverity));
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
